@@ -3,57 +3,513 @@
   "name": "ChordPro",
   "patterns": [
     {
-      "include": "#preamble-directives"
+      "include": "#directive"
     },
     {
-      "include": "#meta-data-directives"
+      "include": "#meta-substitution"
     },
     {
-      "include": "#formatting-directives"
+      "include": "#annotation"
     },
     {
-      "include": "#environment-directives"
+      "include": "#chord"
     },
     {
-      "include": "#chord-diagrams"
+      "include": "#pango-markup"
     },
     {
-      "include": "#fonts-sizes-colours"
+      "include": "#abc-parameter1"
     },
     {
-      "include": "#output-related-directives"
+      "include": "#abc-parameter"
+    },
+    {
+      "include": "#comment-line"
     }
   ],
   "repository": {
-    "preamble-directives": {
+    "chord": {
+      "match": "(\\[)([\\w\\#\\/\\^]+)(\\])",
+      "name": "constant.language.chord.chordpro",
+      "captures": {
+        "1": {
+          "name": "punctuation.definition.chord.begin.chordpro"
+        },
+        "2": {
+          "name": "constant.language.chord.name.chordpro"
+        },
+        "3": {
+          "name": "punctuation.definition.chord.end.chordpro"
+        }
+      }
+    },
+    "annotation": {
+      "match": "(\\[\\*)([ _\\-!\\*\\w\\#\\/\\^]+)(\\])",
+      "name": "text.annotation.chordpro",
+      "captures": {
+        "1": {
+          "name": "punctuation.definition.annotation.begin.chordpro"
+        },
+        "2": {
+          "name": "text.annotation.value.chordpro"
+        },
+        "3": {
+          "name": "punctuation.definition.annotation.end.chordpro"
+        }
+      }
+    },
+    "comment-line": {
       "patterns": [
         {
-          "name": "comment",
-          "match": "#.*"
+          "match": "#.*",
+          "name": "comment.line.number-sign.chordpro"
+        }
+      ]
+    },
+    "meta-substitution": {
+      "match": "(\\%{)([a-z_\\-\\.]+)\\s*((\\|)\\s*([^\\}\\|]+)(\\s*(\\|)\\s*([^\\}]+))?)?(\\})",
+      "name": "meta.structure.meta-substitution.chordpro",
+      "captures": {
+        "1": {
+          "name": "punctuation.definition.meta-substitution.begin.chordpro"
+        },
+        "2": {
+          "comment": "metadata directive name",
+          "name": "entity.name.tag.directive.chordpro"
+        },
+        "4": {
+          "name": "punctuation.definition.separator.meta-substitution.chordpro"
+        },
+        "5": {
+          "comment": "true-text",
+          "name": "variable.other.true.chordpro",
+          "include": "$self"
+        },
+        "7": {
+          "name": "punctuation.definition.separator.meta-substitution.chordpro"
+        },
+        "8": {
+          "comment": "false-text",
+          "name": "variable.other.false.chordpro",
+          "include": "$self"
+        },
+        "9": {
+          "name": "punctuation.definition.meta-substitution.end.chordpro"
+        }
+      }
+    },
+    "directive": {
+      "match": "({)([a-z_\\-\\d]+(:?)\\s*(%{[\\w]+}|[^}]+)*?)(})",
+      "name": "meta.structure.directive.chordpro",
+      "captures": {
+        "1": {
+          "name": "punctuation.definition.directive.begin.chordpro"
+        },
+        "2": {
+          "patterns": [
+            {
+              "include": "#comment-directive-content"
+            },
+            {
+              "include": "#legacy-directive-content"
+            },
+            {
+              "include": "#not-impl-directive-content"
+            },
+            {
+              "include": "#custom-x-directive-content"
+            },
+            {
+              "include": "#meta-directive-content"
+            },
+            {
+              "include": "#preamble-directive-content"
+            },
+            {
+              "include": "#image-directive-content"
+            },
+            {
+              "include": "#metadata-directive-content"
+            },
+            {
+              "include": "#directive-content"
+            }
+          ]
+        },
+        "5": {
+          "name": "punctuation.definition.directive.end.chordpro"
+        }
+      }
+    },
+    "comment-directive-content": {
+      "name": "comment.chordpro",
+      "match": "\\b(c|comment|ci|comment_italic|cb|comment_box|highlight)\\b((:?)\\s*([^\\}]*))?",
+      "captures": {
+        "1": {
+          "name": "support.function.comment.chordpro"
+        },
+        "3": {
+          "name": "punctuation.separator.directive.chordpro"
+        },
+        "4": {
+          "name": "comment.value.chordpro"
+        }
+      }
+    },
+    "preamble-directive-content": {
+      "name": "meta.structure.directive.preamble.chordpro",
+      "match": "\\b(new_song|ns)((:?)\\s*(toc)=\\s*([a-z\\d\\\"]+))?",
+      "captures": {
+        "1": {
+          "name": "entity.name.tag.directive.preamble.chordpro"
+        },
+        "3": {
+          "name": "punctuation.separator.directive.chordpro"
+        },
+        "4": {
+          "name": "constant.language.chordpro"
+        },
+        "5": {
+          "patterns": [
+            {
+              "include": "#string-quoted"
+            },
+            {
+              "name": "string.unquoted.chordpro",
+              "match": "[^\\}]+"
+            }
+          ]
+        }
+      }
+    },
+    "metadata-directive-content": {
+      "name": "meta.structure.directive.metadata.chordpro",
+      "match": "\\b(t|title|st|subtitle|artist|composer|lyricist|copyright|album|year|key|time|tempo|duration|capo)\\b((:?)\\s*([^\\}]+))?",
+      "captures": {
+        "1": {
+          "name": "entity.name.tag.directive.metadata.chordpro"
+        },
+        "3": {
+          "name": "punctuation.separator.directive.chordpro"
+        },
+        "4": {
+          "name": "string.unquoted.chordpro",
+          "match": "[^\\}]+"
+        }
+      }
+    },
+    "custom-x-directive-content": {
+      "name": "meta.structure.directive.custom.chordpro",
+      "match": "\\b(x_[a-z_\\d\\.\\-]+)((:?)\\s*((%{[\\w_\\-\\.\\d]+}|[^}]+)+)?)",
+      "captures": {
+        "1": {
+          "name": "entity.name.tag.directive.custom.chordpro"
+        },
+        "3": {
+          "name": "punctuation.separator.directive.custom.chordpro"
+        },
+        "4": {
+          "name": "meta.structure.directive.custom.attributelist.chordpro",
+          "patterns": [
+            {
+              "include": "#directive-values"
+            }
+          ]
+        }
+      }
+    },
+    "image-directive-content": {
+      "name": "meta.structure.directive.image.chordpro",
+      "match": "\\b(image)((:?)\\s*((%{[\\w_\\-\\.\\d]+}|[^}]+)+)?)",
+      "captures": {
+        "1": {
+          "name": "entity.name.tag.directive.image.chordpro"
+        },
+        "3": {
+          "name": "punctuation.separator.directive.chordpro"
+        },
+        "4": {
+          "name": "meta.structure.directive.image.attributelist.chordpro",
+          "patterns": [
+            {
+              "include": "#directive-values"
+            }
+          ]
+        }
+      }
+    },
+    "meta-directive-content": {
+      "name": "meta.structure.directive.meta.chordpro",
+      "match": "\\b(meta)(:?)\\s*(([a-z]+)\\s*([^\\}]+))?",
+      "captures": {
+        "1": {
+          "name": "entity.name.tag.directive.meta.chordpro"
+        },
+        "2": {
+          "name": "punctuation.separator.directive.chordpro"
+        },
+        "4": {
+          "name": "entity.name.tag.directive.chordpro"
+        },
+        "5": {
+          "name": "meta.structure.directive.meta.attributelist.chordpro",
+          "patterns": [
+            {
+              "include": "#key-value-pair"
+            },
+            {
+              "name": "string.unquoted.chordpro",
+              "match": "[^=]+"
+            }
+          ]
+        }
+      }
+    },
+    "directive-values": {
+      "name": "meta.structure.directive.attributelist.chordpro",
+      "patterns": [
+        {
+          "include": "#key-value-pair"
         },
         {
-          "name": "keyword",
-          "match": "{(new_song|ns)([^{}]*)}"
+          "name": "meta.structure.meta-replacmenent.chordpro",
+          "match": "(%{)([a-z_\\d\\.\\-]+)(})",
+          "captures": {
+            "1": {
+              "name": "punctuation.separator.meta-replacement.begin.chordpro"
+            },
+            "2": {
+              "name": "entity.name.tag.meta-replacement.chordpro"
+            },
+            "3": {
+              "name": "punctuation.separator.meta-replacement.end.chordpro"
+            }
+          }
+        },
+        {
+          "name": "string.unquoted.chordpro",
+          "match": "[^=]"
         }
       ]
     },
-    "meta-data-directives": {
+    "key-value-pair": {
+      "name": "meta.key-value.chordpro",
+      "match": "([a-z\\-]+)\\s*(\\=)\\s*(\\\"([\\w\\s\\d\\.\\-_/:]+)\\\"|([\\w\\s\\d\\.\\-_/\\\\:]+))\\s*",
+      "captures": {
+        "1": {
+          "name": "variable.parameter.attribute.chordpro"
+        },
+        "4": {
+          "name": "string.quoted.attribute.value.chordpro"
+        },
+        "5": {
+          "name": "string.unquoted.attribute.value.chordpro"
+        }
+      }
+    },
+    "not-impl-directive-content": {
+      "name": "meta.structure.directive.not-implemented.chordpro",
+      "match": "\\b(pagetype)((:?)\\s*([^\\}]+))?",
+      "captures": {
+        "1": {
+          "name": "invalid.tag.not-implemented.chordpro"
+        },
+        "3": {
+          "name": "punctuation.separator.directive.chordpro"
+        },
+        "4": {
+          "patterns": [
+            {
+              "name": "string.unquoted.chordpro",
+              "match": "[^=]+"
+            }
+          ]
+        }
+      }
+    },
+    "legacy-directive-content": {
+      "name": "meta.structure.directive.legacy.chordpro",
+      "match": "\\b(g|grid|ng|no_grid|titles|col|columns|diagrams)\\b((:?)\\s*([^\\}]+))?",
+      "captures": {
+        "1": {
+          "name": "invalid.deprecated.tag.legacy.chordpro"
+        },
+        "3": {
+          "name": "punctuation.separator.directive.chordpro"
+        },
+        "4": {
+          "name": "meta.structure.attributelist.value.legacy.chordpro",
+          "patterns": [
+            {
+              "name": "string.unquoted.chordpro",
+              "match": "[^=]+"
+            }
+          ]
+        }
+      }
+    },
+    "directive-content": {
+      "name": "meta.structure.directive.chordpro",
+      "match": "\\b([a-z_\\d\\.]+(\\-[a-z_]+)?)((:?)\\s*([^\\}]+))?",
+      "captures": {
+        "1": {
+          "name": "entity.name.tag.directive.chordpro"
+        },
+        "4": {
+          "name": "punctuation.separator.directive.chordpro"
+        },
+        "5": {
+          "name": "meta.structure.attributelist.value.chordpro",
+          "patterns": [
+            {
+              "include": "#directive-values"
+            }
+          ]
+        }
+      }
+    },
+    "pango-markup": {
+      "contentName": "markup.pango",
+      "begin": "<([a-z]+)(\\s*([^>]+))?>",
+      "beginCaptures": {
+        "1": {
+          "name": "entity.name.type.begin.pango"
+        },
+        "3": {
+          "patterns": [
+            {
+              "include": "#pango-key-value-pair"
+            }
+          ]
+        }
+      },
+      "end": "</(\\1)>",
+      "endCaptures": {
+        "1": {
+          "name": "entity.name.type.end.pango"
+        }
+      },
       "patterns": [
         {
-          "name": "string.regexp",
-          "match": "{(title|t|subtitle|st|artist|composer|lyricist|copyright|album|year|key|time|tempo|duration|capo|meta)(:[^{}]*)}"
+          "include": "$self"
         }
       ]
     },
-    "formatting-directives": {
+    "pango-key-value-pair": {
+      "name": "meta.key-value.pango.chordpro",
+      "match": "([a-z\\-]+)\\s*(\\=)\\s*(\\\"([\\w\\s\\d\\.\\-_/:]+)\\\"|([\\w\\s\\d\\.\\-_/:]+))\\s*",
+      "captures": {
+        "1": {
+          "name": "support.language.other.attribute.chordpro"
+        },
+        "4": {
+          "name": "string.quoted.attribute.value.chordpro"
+        },
+        "5": {
+          "name": "string.unquoted.attribute.value.chordpro"
+        }
+      }
+    },
+    "abc-parameter1": {
+      "name": "meta.structure.definition.parameter.abc",
+      "match": "^([BCDFGHIKLMmNOPQRrSsTUVWwXZ]:)\\s*(.+)",
+      "captures": {
+        "1": {
+          "name": "variable.parameter.abc"
+        },
+        "2": {
+          "patterns": [
+            {
+              "include": "#abc-parameter-values"
+            }
+          ]
+        }
+      }
+    },
+    "abc-parameter": {
+      "name": "meta.structure.definition.parameter.abc",
+      "match": "^(%%)([a-z]+)\\s*(.+)",
+      "captures": {
+        "1": {
+          "name": "punctuation.delimiter.abc"
+        },
+        "2": {
+          "name": "variable.parameter.abc"
+        },
+        "3": {
+          "patterns": [
+            {
+              "include": "#abc-parameter-values"
+            }
+          ]
+        }
+      }
+    },
+    "abc-parameter-values": {
+      "name": "meta.structure.parameter.values.abc",
       "patterns": [
         {
-          "name": "markup.italic",
-          "match": "{(comment|c|comment_italic|ci|comment_box|cb|highlight|image)(:[^{}]*)}"
+          "name": "meta.structure.meta-replacmenent.chordpro",
+          "match": "(%{)([a-z_\\d\\.\\-]+)(})",
+          "captures": {
+            "1": {
+              "name": "punctuation.separator.meta-replacement.begin.chordpro"
+            },
+            "2": {
+              "name": "entity.name.tag.meta-replacement.chordpro"
+            },
+            "3": {
+              "name": "punctuation.separator.meta-replacement.end.chordpro"
+            }
+          }
+        },
+        {
+          "name": "string.unquoted.chordpro",
+          "match": ".*"
         }
       ]
     },
-    "environment-directives": {
+    "string-quoted": {
+      "name": "string.quoted.double.chordpro",
+      "begin": "\"",
+      "end": "\"",
+      "patterns": [
+        {
+          "name": "constant.character.escape.untitled",
+          "match": "\\."
+        }
+      ]
+    },
+    "attribute-list-test": {
+      "comment": "Not Implemented",
+      "name": "meta.structure.attributelist.chordpro",
+      "begin": "([a-z]+)\\s*(=)",
+      "beginCaptures": {
+        "1": {
+          "name": "keyword.other.attribute.chordpro"
+        },
+        "2": {
+          "name": "punctuation.separator.attribute.chordpro"
+        }
+      },
+      "end": "\\s*(\"([\\w\\s\\d]+)\"|([\\w\\s\\d]+))\\b\\s*(.*)",
+      "endCaptures": {
+        "2": {
+          "name": "string.quoted.double.chordpro"
+        },
+        "3": {
+          "name": "string.unquoted.chordpro"
+        },
+        "4": {
+          "patterns": [
+            {
+              "include": "#attribute-list"
+            }
+          ]
+        }
+      }
+    },
+    "environment-directives_orig": {
       "patterns": [
         {
           "name": "variable",
@@ -103,7 +559,6 @@
           "name": "keyword",
           "match": "{(new_page|np|new_physical_page|npp|column_break|cb|grid|g|no_grid|ng)([^{}]*)}"
         },
-
         {
           "name": "keyword",
           "match": "{(columns|col)(:([^{}]*))?}"
