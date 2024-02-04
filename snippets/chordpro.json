@@ -2,33 +2,74 @@
     "Header": {
         "prefix": "header",
         "body": [
-           "{title: $1}",
-           "{key: $2}",
-           "$0"
+            "{title: $1}",
+            "{key: $2}",
+            "$0"
+        ]
+    },
+    "Bridge": {
+        "prefix": "bdef",
+        "body": [
+            "{start_of_bridge}",
+            "$SELECTION$0",
+            "{end_of_bridge}\n"
         ]
     },
     "Chorus": {
         "prefix": "cdef",
         "body": [
             "{start_of_chorus}",
-            "$0",
-            "{end_of_chorus}"
-
+            "$SELECTION$0",
+            "{end_of_chorus}\n"
+        ]
+    },
+    "Grid": {
+        "prefix": "gdef",
+        "body": [
+            "{start_of_grid}",
+            "$SELECTION$0",
+            "{end_of_grid}\n"
+        ]
+    },
+    "Tab": {
+        "prefix": "tdef",
+        "body": [
+            "{start_of_tab}",
+            "$SELECTION$0",
+            "{end_of_tab}\n"
         ]
     },
     "Verse": {
         "prefix": "vdef",
         "body": [
-            "{start_of_verse}",
-            "$0",
-            "{end_of_verse}"
-
-        ]
+            "{start_of_verse: $1}",
+            "$SELECTION$0",
+            "{end_of_verse}\n"
+        ],
+        "scope": "text.chordpro"
     },
     "Chord": {
         "prefix": "chord",
         "body": [
             "[$1]$0"
         ]
+    },
+    "Comment": {
+        "prefix": "c",
+        "body": "{comment: $SELECTION$0}\n",
+        "description": "ChordPro: comment directive",
+        "scope": "text.chordpro"
+    },
+    "Comment_Box": {
+        "prefix": "cb",
+        "body": "{comment_box: $SELECTION$0}\n",
+        "description": "ChordPro: comment_box directive",
+        "scope": "text.chordpro"
+    },
+    "Comment_Italic": {
+        "prefix": "ci",
+        "body": "{comment_italic: $SELECTION$0}\n",
+        "description": "ChordPro: comment_italic directive",
+        "scope": "text.chordpro"
     }
 }
