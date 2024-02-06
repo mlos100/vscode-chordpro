@@ -4,19 +4,18 @@
     // does not support line comments
     "lineComment": "#"
   },
-  // symbols used as brackets
+  // When cursor is moved to a bracket defined here, VS Code will highlight
+  // that bracket together with its matching pair.
   "brackets": [["{", "}"], ["[", "]"]],
   // symbols that are auto closed when typing
   "autoClosingPairs": [
-    ["{", "}"],
-    ["[", "]"],
-    ["(", ")"],
-    ["«", "»"],
-    ["<", ">"],
-    ["'", "'"],
-    ["\"", "\""],
-    ["`", "`"]
+    { "open": "{", "close": "}" },
+    { "open": "[", "close": "]" },
+    { "open": "(", "close": ")" },
+    { "open": "'", "close": "'", "notIn": ["string", "comment"] },
+    { "open": "\"", "close": "\"", "notIn": ["string", "comment"] },
   ],
+
   // symbols that that can be used to surround a selection
   "surroundingPairs": [
     ["{", "}"],
@@ -27,5 +26,11 @@
     ["'", "'"],
     ["\"", "\""],
     ["`", "`"]
-  ]
+  ],
+  "folding": {
+    "markers": {
+      "start": "^{(start_of_|so)[^}]+}",
+      "end": "^\\s*{(end_of_|eo)[\\w]+}"
+    }
+  }
 }
