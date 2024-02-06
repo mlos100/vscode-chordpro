@@ -1,6 +1,6 @@
 MIT License
 
-Copyright (c) 2018 - present Ricardo Marques de Sousa
+Copyright (c) 2024 Michael E. Los
 
 All rights reserved.
 

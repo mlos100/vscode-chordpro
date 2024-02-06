@@ -8,9 +8,21 @@
 
  ## [Unreleased]
 
+The language grammar file was rewritten and several different types of snippets were added
+
 ### Added
 
-- _to be defined_
+- Text inside sections marked by _start_of_ directives can be folded.
+- Syntactic recognition of the following:
+    - directive tags,
+    - chords and annotations,
+    - Pango markup
+    - metadata substitution,
+    - comment lines
+- Snippets
+  - Comment directives
+  - Song Sections: Verse, Chorus, Bridge, Tab, Grid
+  - ASCII Tab for Guitar (Standard tuning), Bass (4 string), Ukulele
 
 ### 0.1.0 - 2024-01-16
 
