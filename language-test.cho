@@ -4,15 +4,17 @@
 #------------------------------------------------------------------------------+
 
 #------------------------------------------------------------------------------+
- Preamble directives
+# Preamble directives
 #------------------------------------------------------------------------------+
 
 # This directive indicates that the current song, if any, is complete and that a
 # new song will follow. This is implied at the start of a ChordPro file.
 {new_song} {ns}
+{ns: toc=off}
+{ns: toc="off"}
 
 #------------------------------------------------------------------------------+
- Meta-data directives
+# Meta-data directives
 #------------------------------------------------------------------------------+
 
 # This directive defines the title of the song.
@@ -66,17 +68,29 @@
 # This directive specifies the capo setting for the song.
 {capo: 2}
 
+#------------------------------------------------------------------------------+
+# Meta directives
+#------------------------------------------------------------------------------+
 # This directive defines a meta-data item. Sets meta-data item name to the
 # specified contents.
-{meta: name value} {meta: artist The Beatles}
+{meta: name value} 
+{meta: artist The Beatles}
+{meta: artist value}
+
+{meta: templ id="star" scale="0.12" anchor="paper"}
+{meta: temp2 val="%{somekey}"}
+{meta: temp2 %{somekey}}
+{meta: temp2 leading text %{some_key}}
+{meta: some_tag %{other_tag} more text}
 
 #------------------------------------------------------------------------------+
- Formatting directives
+# Commenting directives (Formatting in spec)
 #------------------------------------------------------------------------------+
 
 # Comments can be used to place additional playing instructions in the song.
 # A comment that historically was shown with a grey background.
 {comment: a regular comment} {c: a regular comment}
+{c: Comment containing metada substituion %{artist}}
 
 # A comment that historically was shown using an italic typeface.
 {comment_italic: an italic comment} {ci: an italic comment}
@@ -84,14 +98,42 @@
 # A comment that historically was shown using a box around the text.
 {comment_box: a boxed comment} {cb: a boxed comment}
 
+
 # This is an alternative to comment.
 {highlight: highlighted text}
 
+#------------------------------------------------------------------------------+
+# Image directive (Formatting in spec)
+#------------------------------------------------------------------------------+
 # Includes a bitmap image.
+{image: options}
+{image: src="filename"}
+{image: src = filename}
 {image: src=filename options}
+{image: options src=filename options}
+{image id="star" scale="0.12" anchor="paper" x="20" y="40"}
+{image id="star" scale="0.15" anchor="paper" x="47" y="20"}
+{image id="star" scale="0.12" anchor="paper" x="80" y="40"}
+{image: %{templ} x="80" y="40%"}
+{image-bass: src = filename}
+{image-guitar: src="filename2.txt"}
 
 #------------------------------------------------------------------------------+
- Environment directives
+# Custom (vendor-specific) directives
+#------------------------------------------------------------------------------+
+# The x_ prefix is recommended for vendor-specific directive names.
+{saved_value: some value}
+{x_mspro_somekey: leading text %{some_value}}
+{x_mspro_somekey: %{some_value} trailing stuff}
+{x_mspro_somekey: %{title}}
+{x_mspro_somekey: some value}
+{x_mspro_somekey: value 5%}
+{x_mspro_somekey: value="5"}
+{x_mspro_somekey: value="5%"}
+{x_mspro_somename-guitar: some value}
+
+#------------------------------------------------------------------------------+
+# Environment directives
 #------------------------------------------------------------------------------+
 
 # This directive indicates that the lines that follow form the song's chorus.
@@ -111,18 +153,29 @@
 # as song lines in a verse, but it may be advantageous to explicitly specify it.
 # This directive may include an optional label, to be printed
 # in the left margin.
-{start_of_verse} {start_of_verse: Verse 1}
+{start_of_verse} 
+# Specifies the end of the verse.
+{end_of_verse}
+{start_of_verse: Verse 1}
+{end_of_verse}
+{start_of_verse: label="Verse 1"}
+{end_of_verse}
 
+{start_of_verse Verse 1}
+[*a short annotation][C7]Lyric line here to test [G]folding
 # Specifies the end of the verse.
 {end_of_verse}
 
 # This directive indicates that the lines that follow form a section of guitar
 # TAB instructions. This directive may include an optional label, to be printed
 # in the left margin.
-{start_of_tab} {sot} {start_of_tab: Solo} {sot: Solo}
-
+{start_of_tab}
+{start_of_tab: Solo} 
 # This directive indicates the end of the tab.
-{end_of_tab} {eot}
+{end_of_tab}
+{sot: Solo}
+{eot}
+{sot} {eot}
 
 # This directive indicates that the lines that follow define a chord grid in the
 # style of Jazz Grilles.
@@ -137,7 +190,7 @@
 
 
 #------------------------------------------------------------------------------+
- Chord diagrams
+# Chord Diagram Definitions
 #------------------------------------------------------------------------------+
 
 # This directive defines a chord in terms of fret/string positions and,
@@ -160,7 +213,7 @@
 {chord: As  base-fret 4 frets 1 3 3 2 1 1 fingers 1 3 4 2 1 1}
 
 #------------------------------------------------------------------------------+
- Fonts, sizes and colours
+# Fonts, sizes and colours
 #------------------------------------------------------------------------------+
 
 # These directives change the font, size and colour of the song lyrics that
@@ -177,9 +230,14 @@ I [D]looked over Jordan, and [G]what did I [D]see,
 {textcolour: red}
 {textsize: 150%}
 Comin’ for to carry me [A7]home.
+# Directive without a value sets back to default values
 {textcolour}
 {textsize}
 A [D]band of angels [G]comin’ after [D]
+
+# Text that uses directive keywords (these should not match)
+This song is about an [Em7]artist and lyricist and [GMaj7]composer.
+The loved [D/F#]meta and [Dsus4]image and title.
 
 # These directives change the font, size and colour of the song chords that
 # follow. The font must be a known font name, or the name of a file containing a
@@ -220,7 +278,7 @@ E|---------------------------------||
 {end_of_tab}
 
 #------------------------------------------------------------------------------+
- Output related directives
+# Output related directives
 #------------------------------------------------------------------------------+
 
 # This directive forces a new page to be generated at the place where it occurs
@@ -233,12 +291,20 @@ E|---------------------------------||
 # When printing songs in multiple columns, this directive forces printing to
 # continue in the next column. When in the last (or only) column, this directive
 # forces a page break just like the new_page directive.
-{column_break} {cb}
+{column_break} {colb}
+
+#------------------------------------------------------------------------------+
+# Legacy directives
+#------------------------------------------------------------------------------+
+# The following directives are legacy from the old chord program.
+# The modern reference implementation uses much more powerful configuration
+# files for this purpose.
 
 # Enables printing of the list of chord diagrams at the end of the current song.
 # The name grid is an unfortunate legacy from the original chord program and
 # must not be confused with the chord grids facility.
 {grid} {g}
+{diagrams: on|off|top|bottom|right|left}
 
 # Disables printing of the list of chord diagrams at the end of the current
 # song.
@@ -246,3 +312,63 @@ E|---------------------------------||
 
 # This directives specifies that the song must be printed in ncol columns.
 {columns: ncol } {columns: 2} {col: 2}
+
+{titles: center} 
+
+#------------------------------------------------------------------------------+
+# Not Implemented directives
+#------------------------------------------------------------------------------+
+ # ChordPro v6: Not implemented. Use the configuration files instead.
+{pagetype: letter}
+{pagetype: a4}
+
+#------------------------------------------------------------------------------+
+# Custom Directives
+#------------------------------------------------------------------------------+
+{x_mspro_pedal_setting: on}
+{x_musicstand_flow: V1 V2 CH}
+{ccli: 123454}
+
+
+#------------------------------------------------------------------------------+
+# Conditional Directives
+#------------------------------------------------------------------------------+
+{define-guitar:  Am base-fret 1 frets 0 2 2 1 0 0}
+{define-ukulele: Am base-fret 1 frets 2 0 0 0}
+
+{comment-alto:  Very softly!}
+{comment-tenor: Sing this with power}
+
+{title-somekey: A Title Value}
+
+{start_of_verse-soprano}
+# ...anything goes, including other directives...
+{end_of_verse}
+
+#------------------------------------------------------------------------------+
+# Metadata Substitution
+#------------------------------------------------------------------------------+
+%{anything| truetext | falsetext}
+%{year}
+%{anything|%{year}}
+
+{some_custome: %{year}}
+
+%{root|%{}%{qual|%{}}%{ext|%{}}%{bass|/%{}}|%{name}}
+%{root|%{}%{qual|<sup>%{}</sup>}%{ext|<sup>%{}</sup>}%{bass|/<sub>%{}</sub>}|%{name}}
+%{root|%{}%{qual|<sup>%{}</sup>}%{ext|<sup>%{}</sup>}%{bass|/<sub>%{}</sub>}|%{name}}
+
+%{root|%{}%{qual|<sup>%{}%{ext|%{}}</sup>}%{bass|/<sub>%{}</sub>}|%{name}}%{xc.root| (%{xc.formatted})}
+%{xc.root| (%{xc.formatted})}
+
+#------------------------------------------------------------------------------+
+# Pango Markup and convenience elements
+#------------------------------------------------------------------------------+
+<b>This is bold</b>
+<i>This <b>should</b> be italic</i>
+<span color="blue" href="https://www.youtube.com/watch?v=B6_EGUsKd1c&t=2s">How to play His Mercy Is More - Tutorial | Lessons With B</span>
+<span color="blue" href="https://www.youtube.com/watch?v=YoH0YlniUbU&t=91s">His Mercy Is More // Hymns Live - Acoustic Guitar Playthrough</span>
+
+<html>These <body>are not Pango markup <table>tags</table></body></html>
+
+
